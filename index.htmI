@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>VR MATRIX OBFUSCATOR 💀</title>
+
+<style>
+body{
+margin:0;
+background:black;
+color:#00ff88;
+font-family: monospace;
+direction:rtl;
+}
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+textarea{
+width:80%;
+height:120px;
+margin:10px;
+background:black;
+color:#00ff88;
+border:1px solid #00ff88;
+}
+button{
+padding:10px 15px;
+margin:5px;
+background:#00ff88;
+border:none;
+cursor:pointer;
+color:black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="m"></canvas>
+
+<div style="text-align:center">
+<h1>💀 VR MATRIX BUILDER</h1>
+
+<h2>🔐 تشفير</h2>
+<textarea id="in"></textarea><br>
+<button onclick="enc()">تشفير</button>
+<textarea id="out"></textarea>
+
+<h2>🔓 فك التشفير</h2>
+<textarea id="in2"></textarea><br>
+<button onclick="dec()">فك</button>
+<textarea id="out2"></textarea>
+</div>
+
+<script>
+
+// خلفية طلاسم
+const c=document.getElementById("m");
+const x=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
+
+let ch="01█▓▒░☠☣✶✧✬✪✷✹";
+ch=ch.split("");
+let d=[];
+for(let i=0;i<120;i++) d[i]=1;
+
+function dr(){
+x.fillStyle="rgba(0,0,0,0.05)";
+x.fillRect(0,0,c.width,c.height);
+x.fillStyle="#0f0";
+for(let i=0;i<d.length;i++){
+let t=ch[Math.random()*ch.length|0];
+x.fillText(t,i*10,d[i]*10);
+if(d[i]*10>c.height)d[i]=0;
+d[i]++;
+}}
+setInterval(dr,28);
+
+// random
+function r(n){
+let c="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+let s="";
+for(let i=0;i<n;i++) s+=c[Math.random()*c.length|0];
+return s;
+}
+
+// =========================
+// 🔐 VR ENCRYPT (FIXED)
+// =========================
+function enc(){
+
+let code=document.getElementById("in").value;
+
+// طبقات
+let s=btoa(unescape(encodeURIComponent(code)));
+s=s.split("").reverse().join("");
+s=btoa(s);
+s=[...s].map(x=>x.charCodeAt(0)+6).join(",");
+
+// أسماء
+let A=r(6),B=r(6),C=r(5);
+
+// 🔥 بناء مصفوفة VR7 style
+let arr = [];
+for(let i=0;i<code.length+10;i++){
+arr.push("`"+r(4)+"=`"+r(4));
+}
+
+let final = `
+-- ☠ VR MATRIX SYSTEM ☠
+return(function(...)
+
+local F={${arr.join(",")}}
+
+local DATA="${s}"
+
+local function DECRYPT(x)
+
+local t=""
+for n in string.gmatch(x,"[^,]+") do
+t=t..string.char(tonumber(n)-6)
+end
+
+t=string.reverse(t)
+t=atob(t)
+
+return (loadstring or load)(t)()
+end
+
+-- VR CORE EXEC
+return DECRYPT(DATA)
+
+end)()
+`;
+
+document.getElementById("out").value=final;
+}
+
+// =========================
+// 🔓 DECRYPT
+// =========================
+function dec(){
+try{
+
+let s=document.getElementById("in2").value;
+
+let m=s.match(/"([^"]+)"/)[1];
+
+let t="";
+m.split(",").forEach(n=>{
+t+=String.fromCharCode(n-6);
+});
+
+t=atob(t.split("").reverse().join(""));
+t=decodeURIComponent(escape(atob(t)));
+
+document.getElementById("out2").value=t;
+
+}catch{
+document.getElementById("out2").value="❌ فشل فك التشفير";
+}
+}
+
+</script>
+
+</body>
+</html>
